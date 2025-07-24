@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug API with Postman",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/server.js", // ✅ updated path
+      "env": {
+        "NODE_ENV": "development" // ✅ optional, helps if you use env vars
+      }
+    }
+  ]
+}
