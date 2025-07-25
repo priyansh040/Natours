@@ -6,25 +6,15 @@ class APIFeatures {
 
   filter() {
     const queryObj = { ...this.queryString };
-    const excludeFields = ['page', 'sort', 'limit', 'fields'];
-    excludeFields.forEach((el) => delete queryObj[el]);
+    const excludedFields = ['page', 'sort', 'limit', 'fields'];
+    excludedFields.forEach((el) => delete queryObj[el]);
 
-    // Advanced filtering: convert 'price[gte]' to { price: { $gte: 5 } }
-    const mongoQuery = {};
+    // 1B) Advanced filtering
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
 
-    Object.keys(queryObj).forEach((key) => {
-      if (key.includes('[') && key.includes(']')) {
-        const [field, operator] = key.split(/\[|\]/); // e.g. 'price[gte]' → ['price', 'gte']
-        if (!mongoQuery[field]) {
-          mongoQuery[field] = {};
-        }
-        mongoQuery[field][`$${operator}`] = Number(queryObj[key]);
-      } else {
-        mongoQuery[key] = queryObj[key];
-      }
-    });
+    this.query = this.query.find(JSON.parse(queryStr));
 
-    this.query = this.query.find(mongoQuery);
     return this;
   }
 

@@ -1,9 +1,11 @@
 const express = require('express');
 const morgan = require('morgan');
+const qs = require('qs');
 const tourRouter = require('./routes/tourRoute');
 const userRouter = require('./routes/userRoute');
 
 const app = express();
+app.set('query parser', (str) => qs.parse(str));
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
