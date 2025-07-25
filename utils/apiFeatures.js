@@ -24,8 +24,6 @@ class APIFeatures {
       }
     });
 
-    console.log(mongoQuery); // ✅ should look like: { price: { $gte: 5 } }
-
     this.query = this.query.find(mongoQuery);
     return this;
   }

@@ -1,23 +1,26 @@
-// in express many packages depend on special variable node_env
-const mongoose = require('mongoose');
+// 1. Load environment variables first
 const dotenv = require('dotenv');
 
-dotenv.config({ path: './config.env' });
+dotenv.config();
+
+// 2. Import dependencies
+const mongoose = require('mongoose');
+const app = require('./app');
+
+// 3. Setup DB connection string using environment variables
 const DB = process.env.DATABASE.replace(
   '<PASSWORD>',
   process.env.DATABASE_PASSWORD,
 );
 
+// 4. Connect to MongoDB using Mongoose
 mongoose
   .connect(DB)
   .then(() => console.log('DB connection successful!'))
   .catch((err) => console.error('DB connection error:', err));
 
-const app = require('./app');
-// console.log(process.env);
-
-const port = 3000;
-
+// 5. Start the server
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Listening on port ${port}...`);
 });
