@@ -1,7 +1,7 @@
 // Import required modules
-const User = require('../models/userModel');
-const catchAsync = require('../utils/catchAsync');
-const AppError = require('../utils/appError');
+import User from '../models/userModel.js';
+import catchAsync from '../utils/catchAsync.js';
+import AppError from '../utils/appError.js';
 
 /**
  * Utility function to filter the fields from an object
@@ -21,10 +21,9 @@ const filterObj = (obj, ...allowedFields) => {
  * @route  GET /api/v1/users
  * @access Public (ideally should be restricted to admin)
  */
-exports.getAllUsers = catchAsync(async (req, res, next) => {
+export const getAllUsers = catchAsync(async (req, res, next) => {
   const users = await User.find(); // Fetch all users
 
-  // Send successful response with user data
   res.status(200).json({
     status: 'success',
     results: users.length,
@@ -40,8 +39,7 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
  * @route  PATCH /api/v1/users/updateMe
  * @access Private (only for logged-in users)
  */
-exports.updateMe = catchAsync(async (req, res, next) => {
-  // 1) Throw error if user tries to update password here
+export const updateMe = catchAsync(async (req, res, next) => {
   if (req.body.password || req.body.passwordConfirm) {
     return next(
       new AppError(
@@ -51,16 +49,13 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     );
   }
 
-  // 2) Filter only allowed fields (name and email)
   const filteredBody = filterObj(req.body, 'name', 'email');
 
-  // 3) Update the user document
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
-    new: true, // Return the modified document rather than the original
-    runValidators: true, // Run schema validators on update
+    new: true,
+    runValidators: true,
   });
 
-  // Send updated user in response
   res.status(200).json({
     status: 'success',
     data: {
@@ -75,46 +70,40 @@ exports.updateMe = catchAsync(async (req, res, next) => {
  * @route  DELETE /api/v1/users/deleteMe
  * @access Private (only for logged-in users)
  */
-exports.deleteMe = catchAsync(async (req, res, next) => {
+export const deleteMe = catchAsync(async (req, res, next) => {
   await User.findByIdAndUpdate(req.user.id, { active: false });
 
   res.status(204).json({
     status: 'success',
-    data: null, // No content
+    data: null,
   });
 });
 
 /**
- * The following handlers are placeholders for admin-level CRUD operations
- * These routes should ideally be protected and used only by admins
+ * Admin-level routes: Not implemented yet
  */
-
-// Get a single user by ID (Admin functionality)
-exports.getUser = (req, res) => {
+export const getUser = (req, res) => {
   res.status(500).json({
     status: 'error',
     message: 'This route is not yet defined!',
   });
 };
 
-// Create a new user (Admin functionality)
-exports.createUser = (req, res) => {
+export const createUser = (req, res) => {
   res.status(500).json({
     status: 'error',
     message: 'This route is not yet defined!',
   });
 };
 
-// Update user data by ID (Admin functionality)
-exports.updateUser = (req, res) => {
+export const updateUser = (req, res) => {
   res.status(500).json({
     status: 'error',
     message: 'This route is not yet defined!',
   });
 };
 
-// Delete a user by ID (Admin functionality)
-exports.deleteUser = (req, res) => {
+export const deleteUser = (req, res) => {
   res.status(500).json({
     status: 'error',
     message: 'This route is not yet defined!',

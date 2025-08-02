@@ -1,8 +1,8 @@
-const express = require('express');
+import express from 'express';
 
 // Controller modules for business logic
-const tourController = require('../controllers/tourController');
-const authController = require('../controllers/authController');
+import * as tourController from '../controllers/tourController.js';
+import * as authController from '../controllers/authController.js';
 
 // Create a new router instance
 const router = express.Router();
@@ -52,4 +52,4 @@ router
 /*                            EXPORT THE ROUTER                               */
 /* -------------------------------------------------------------------------- */
 
-module.exports = router;
+export default router;

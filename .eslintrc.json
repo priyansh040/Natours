@@ -15,6 +15,7 @@
     }
   },
   "rules": {
+    "import/first": "off",
     "prettier/prettier": ["error", { "endOfLine": "auto" }],
     "spaced-comment": "off",
     "no-console": "warn",
@@ -27,6 +28,18 @@
     "no-underscore-dangle": "off",
     "class-methods-use-this": "off",
     "prefer-destructuring": ["error", { "object": true, "array": false }],
-    "no-unused-vars": ["error", { "argsIgnorePattern": "req|res|next|val" }]
+    "no-unused-vars": ["error", { "argsIgnorePattern": "req|res|next|val" }],
+
+    // 👇 Add this rule to allow .js in import paths
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "always",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ]
   }
 }
